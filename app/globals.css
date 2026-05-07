@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.72), transparent 28%),
+    linear-gradient(180deg, #f5f0e8 0%, #f7f3ed 52%, #efe5d7 100%);
+  color: #1a1d1b;
+}
+
+::selection {
+  background: rgba(15, 36, 56, 0.18);
+}
+
+.prose-copy p + p {
+  margin-top: 1.35rem;
+}
+
+.deferred-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 900px;
+}
