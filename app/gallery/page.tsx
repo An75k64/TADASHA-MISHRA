@@ -172,13 +172,13 @@ export default function GalleryPage() {
                     rel="noopener noreferrer"
                   >
                     <div className="group relative overflow-hidden rounded-2xl bg-navy/5 ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg">
-                      <div className="relative aspect-[4/3] w-full">
+                      <div className="relative aspect-[1.3333] w-full">
                         <Image
                           src={item.src}
                           alt={item.title}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                          className="object-cover transition duration-500 group-hover:scale-105"
                         />
                       </div>
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent p-4">
@@ -188,13 +188,13 @@ export default function GalleryPage() {
                   </a>
                 ) : (
                   <div className="group relative overflow-hidden rounded-2xl bg-navy/5 ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg">
-                    <div className="relative aspect-[4/3] w-full">
+                    <div className="relative aspect-[1.3333] w-full">
                       <Image
                         src={item.src}
                         alt={item.title}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                        className="object-cover transition duration-500 group-hover:scale-105"
                       />
                     </div>
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent p-4">

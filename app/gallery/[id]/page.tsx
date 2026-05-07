@@ -1,5 +1,3 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
 
@@ -118,8 +116,9 @@ const GALLERY_ITEMS = [
   },
 ];
 
-export default function GalleryDetail({ params }: { params: { id: string } }) {
-  const item = GALLERY_ITEMS.find(i => i.id === parseInt(params.id));
+export default async function GalleryDetail({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const item = GALLERY_ITEMS.find((entry) => entry.id === Number.parseInt(id, 10));
 
   if (!item) {
     return (
