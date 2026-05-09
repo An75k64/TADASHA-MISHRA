@@ -1,10 +1,11 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 export function ContactForm() {
   const [status, setStatus] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -55,7 +56,9 @@ export function ContactForm() {
       }
 
       setStatus("Message sent successfully.");
-      event.currentTarget.reset();
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Failed to send. Please try again later.";
       setStatus(message);
@@ -65,7 +68,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
       <div className="hidden">
         <label htmlFor="company">Company</label>
         <input id="company" name="company" tabIndex={-1} autoComplete="off" />
