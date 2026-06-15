@@ -1,11 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Container } from "@/components/container";
 
 export default function AboutPage() {
   const [showMore, setShowMore] = useState(false);
+  const [data, setData] = useState({
+    introText1: "Tadasha Mishra is a 1994 batch Indian Police Service officer serving as the Director General of Police, Jharkhand, and the first woman to lead the state police.",
+    introText2: "Her professional identity blends operational leadership, investigative discipline, and institutional reform across more than three decades of service.",
+    biographyHeading: "A 1994 batch Indian Police Service officer, Tadasha Mishra has built a distinguished career spanning field operations, district leadership, and senior command roles across Bihar and Jharkhand.",
+    biographyText: "She has held key positions including Additional Director General of Police and Special Director General of Police, CID.",
+    biographyMore1: "With deep experience in investigations, intelligence coordination, and operational command.",
+    biographyMore2: "As Director General of Police, Jharkhand, she focuses on investigation quality, accountability, and strong coordination across units.",
+    biographyMore3: "Her leadership reflects a belief in combining operational discipline with institutional collaboration.",
+    approach: "Focus on investigative integrity, procedural discipline, and inter-agency coordination with evidence-based policing.",
+    vision: "Build a policing system defined by accountability, investigative excellence, and public trust."
+  });
+
+  useEffect(() => {
+    fetch('/api/admin/settings?key=about')
+      .then(res => res.json())
+      .then(fetchedData => {
+        if (fetchedData) setData(prev => ({ ...prev, ...fetchedData }));
+      })
+      .catch(console.error);
+  }, []);
 
   return (
     <section className="relative overflow-hidden bg-[#f7f2ea]">
@@ -28,11 +48,11 @@ export default function AboutPage() {
             </h1>
 
             <p className="mt-5 text-[18px] md:text-[19px] leading-8 text-ink/80 max-w-xl">
-              Tadasha Mishra is a 1994 batch Indian Police Service officer serving as the Director General of Police, Jharkhand, and the first woman to lead the state police.
+              {data.introText1}
             </p>
 
             <p className="mt-4 text-[18px] md:text-[19px] leading-8 text-ink/80 max-w-xl">
-              Her professional identity blends operational leadership, investigative discipline, and institutional reform across more than three decades of service.
+              {data.introText2}
             </p>
           </div>
 
@@ -68,7 +88,7 @@ export default function AboutPage() {
           className="mt-8 text-3xl md:text-5xl leading-[1.2] text-[#0d2a52] max-w-4xl mx-auto"
           style={{ fontFamily: "var(--font-serif)" }}
         >
-          A 1994 batch Indian Police Service officer, Tadasha Mishra has built a distinguished career spanning field operations, district leadership, and senior command roles across Bihar and Jharkhand.
+          {data.biographyHeading}
         </h2>
 
         <div className="mt-8 flex justify-center">
@@ -76,16 +96,18 @@ export default function AboutPage() {
         </div>
 
         <p className="mt-5 text-[16px] md:text-[17px] leading-7 text-ink/70 max-w-2xl mx-auto">
-          She has held key positions including Additional Director General of Police and Special Director General of Police, CID.
+          {data.biographyText}
         </p>
 
-        {showMore && (
-          <div className="mt-4 space-y-3 text-[16px] md:text-[17px] leading-7 text-ink/70 max-w-2xl mx-auto">
-            <p>With deep experience in investigations, intelligence coordination, and operational command.</p>
-            <p>As Director General of Police, Jharkhand, she focuses on investigation quality, accountability, and strong coordination across units.</p>
-            <p>Her leadership reflects a belief in combining operational discipline with institutional collaboration.</p>
-          </div>
-        )}
+        <div 
+          className={`space-y-3 text-[16px] md:text-[17px] leading-7 text-ink/70 max-w-2xl mx-auto overflow-hidden transition-all duration-500 ${
+            showMore ? "mt-4 max-h-[500px] opacity-100" : "mt-0 max-h-0 opacity-0"
+          }`}
+        >
+          <p>{data.biographyMore1}</p>
+          <p>{data.biographyMore2}</p>
+          <p>{data.biographyMore3}</p>
+        </div>
 
         <button
           onClick={() => setShowMore(!showMore)}
@@ -115,7 +137,7 @@ export default function AboutPage() {
             <div className="my-3 h-px w-full bg-[#e7cfd4]" />
 
             <p className="text-[15px] leading-6 text-ink/75">
-              Focus on investigative integrity, procedural discipline, and inter-agency coordination with evidence-based policing.
+              {data.approach}
             </p>
           </div>
 
@@ -133,7 +155,7 @@ export default function AboutPage() {
             <div className="my-3 h-px w-full bg-[#e7cfd4]" />
 
             <p className="text-[15px] leading-6 text-ink/75">
-              Build a policing system defined by accountability, investigative excellence, and public trust.
+              {data.vision}
             </p>
 
           </div>

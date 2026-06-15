@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
+import { LanguageToggle } from "@/components/language-toggle";
 
 const links = [
   { href: "/", label: "Home" },
@@ -12,7 +13,7 @@ const links = [
 
 export function Navbar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-paper/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-black/10 bg-paper/85 backdrop-blur-xl relative">
       <div className="h-px w-full bg-gradient-to-r from-transparent via-bronze/50 to-transparent" />
       <Container className="flex items-center justify-center py-4">
         <nav className="flex flex-wrap items-center justify-center gap-2 rounded-full border border-black/10 bg-white/60 p-2 shadow-sm backdrop-blur-sm md:gap-3">
@@ -29,6 +30,7 @@ export function Navbar() {
           ))}
         </nav>
       </Container>
+      <LanguageToggle />
     </header>
   );
 }

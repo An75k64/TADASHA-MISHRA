@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  subject   String
+  message   String
+  date      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SiteSetting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String // JSON string for objects/arrays or plain text
+}
+
+model TimelineEntry {
+  id          Int      @id @default(autoincrement())
+  year        String
+  title       String
+  description String
+  focus       String
+  detailsJson String   // JSON string of string[]
+  orderIndex  Int      @default(0)
+}
+
+model Article {
+  id                Int      @id @default(autoincrement())
+  slug              String   @unique
+  title             String
+  date              String
+  excerpt           String
+  category          String
+  contentJson       String   // JSON string of string[]
+  externalLinksJson String   // JSON string of {label, href}[]
+  orderIndex        Int      @default(0)
+}
+
+model GalleryImage {
+  id          Int      @id @default(autoincrement())
+  src         String
+  alt         String
+  description String?  // Added for storytelling popup
+  featured    Boolean  @default(false)
+  tagsJson    String   // JSON string of string[]
+  link        String?  // Optional redirect link
+  orderIndex  Int      @default(0)
+}
+
+model Stat {
+  id         Int    @id @default(autoincrement())
+  label      String
+  value      String
+  orderIndex Int    @default(0)
+}

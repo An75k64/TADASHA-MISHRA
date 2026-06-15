@@ -1,6 +1,7 @@
-import { timeline } from "@/lib/site-data";
+import { prisma } from "@/lib/db";
 
-export function ServiceShowcase() {
+export async function ServiceShowcase() {
+  const timeline = await prisma.timelineEntry.findMany({ orderBy: { orderIndex: 'asc' } });
   return (
     <div className="mt-14 space-y-10">
       {timeline.map((entry) => (

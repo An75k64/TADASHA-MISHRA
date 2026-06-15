@@ -1,44 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Container } from "@/components/container";
 
-const milestones = [
-  {
-    year: "1994 - 2000",
-    role: "Joined IPS, Bihar Cadre",
-    achievement:
-      "Began her career as a 1994 batch IPS officer, building foundational field experience in Bihar district policing."
-  },
-  {
-    year: "2000 - 2008",
-    role: "Transitioned to Jharkhand",
-    achievement:
-      "Joined the Jharkhand cadre after state formation and served in key field roles including Giridih, Bokaro, and Ranchi."
-  },
-  {
-    year: "2008 - 2015",
-    role: "Senior Leadership Roles",
-    achievement:
-      "Became a trusted leader in senior command, strengthening coordination and administrative discipline across the state."
-  },
-  {
-    year: "2015 - 2020",
-    role: "Special DGP, CID",
-    achievement:
-      "Led CID functions with a focus on investigative excellence, intelligence coordination, and procedural accountability."
-  },
-  {
-    year: "2020 - 2026",
-    role: "DGP Jharkhand",
-    achievement:
-      "Leads the state police with authority, institutional clarity, and a strong focus on accountable and efficient policing."
-  }
-];
-
 export default function CareerPage() {
   const [showMore, setShowMore] = useState(false);
+  const [milestones, setMilestones] = useState<{id: number; year: string; title: string; description: string; focus: string; details: string[]}[]>([
+    {
+      id: 0,
+      year: "1994 - 2000",
+      title: "Joined IPS, Bihar Cadre",
+      description: "Began her career as a 1994 batch IPS officer, building foundational field experience in Bihar district policing.",
+      focus: "",
+      details: []
+    },
+    {
+      id: 1,
+      year: "2000 - 2008",
+      title: "Transitioned to Jharkhand",
+      description: "Joined the Jharkhand cadre after state formation and served in key field roles including Giridih, Bokaro, and Ranchi.",
+      focus: "",
+      details: []
+    },
+    {
+      id: 2,
+      year: "2008 - 2015",
+      title: "Senior Leadership Roles",
+      description: "Became a trusted leader in senior command, strengthening coordination and administrative discipline across the state.",
+      focus: "",
+      details: []
+    },
+    {
+      id: 3,
+      year: "2015 - 2020",
+      title: "Special DGP, CID",
+      description: "Led CID functions with a focus on investigative excellence, intelligence coordination, and procedural accountability.",
+      focus: "",
+      details: []
+    },
+    {
+      id: 4,
+      year: "2020 - 2026",
+      title: "DGP Jharkhand",
+      description: "Leads the state police with authority, institutional clarity, and a strong focus on accountable and efficient policing.",
+      focus: "",
+      details: []
+    }
+  ]);
+
+  useEffect(() => {
+    fetch('/api/timeline')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setMilestones(data);
+        }
+      })
+      .catch(err => console.error("Failed to fetch timeline:", err));
+  }, []);
 
   return (
     <section className="relative overflow-hidden bg-[#f7f2ea]">
@@ -167,17 +187,25 @@ export default function CareerPage() {
 
                   <span className="absolute left-0 top-5 bottom-5 w-[3px] bg-[#e8850a] scale-y-0 group-hover:scale-y-100 origin-top transition-transform duration-300 rounded-full" />
 
-                  <div className="flex h-14 w-14 items-center justify-center rounded-full border border-[#b98a53] bg-[#f7f2ea] text-[10px] font-semibold text-[#0d2a52] whitespace-nowrap">
+                  <div className="flex h-14 w-14 p-1 items-center justify-center rounded-full border border-[#b98a53] bg-[#f7f2ea] text-[9px] font-semibold text-[#0d2a52] text-center leading-[1.2] break-words">
                     {item.year}
                   </div>
 
                   <div className="mt-4 text-xs font-semibold text-[#0d2a52]">
-                    {item.role}
+                    {item.title}
                   </div>
 
                   <p className="mt-2 text-xs leading-5 text-gray-600">
-                    {item.achievement}
+                    {item.description}
                   </p>
+
+                  {item.details && item.details.length > 0 && (
+                    <ul className="mt-3 text-left list-disc list-outside ml-4 text-[11px] leading-5 text-gray-600 space-y-1">
+                      {item.details.map((point, i) => (
+                        <li key={i}>{point}</li>
+                      ))}
+                    </ul>
+                  )}
 
                 </div>
               ))}

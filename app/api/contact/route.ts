@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { prisma } from "@/lib/db";
 
 export const runtime = "nodejs";
 
@@ -144,6 +145,25 @@ export async function POST(request: Request) {
 
   if (name.length > 200 || email.length > 200 || subject.length > 200 || message.length > 5000) {
     return NextResponse.json({ ok: false, error: "Message too long." }, { status: 400 });
+  }
+
+  try {
+    const formattedDate = new Date().toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    });
+    await prisma.message.create({
+      data: {
+        name,
+        email,
+        subject,
+        message,
+        date: formattedDate,
+      }
+    });
+  } catch (dbErr) {
+    console.error("Failed to save message to db", dbErr);
   }
 
   try {

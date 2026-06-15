@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Container } from "@/components/container";
-import { articles } from "@/lib/site-data";
+import { prisma } from "@/lib/db";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const articles = await prisma.article.findMany({ select: { slug: true } });
   return articles.map((article) => ({ slug: article.slug }));
 }
 
@@ -13,7 +14,17 @@ export default async function WritingDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = articles.find((entry) => entry.slug === slug);
+  const dbArticle = await prisma.article.findUnique({ where: { slug } });
+
+  if (!dbArticle) {
+    notFound();
+  }
+
+  const article = {
+    ...dbArticle,
+    content: JSON.parse(dbArticle.contentJson),
+    externalLinks: JSON.parse(dbArticle.externalLinksJson)
+  };
 
   if (!article) {
     notFound();
@@ -31,7 +42,7 @@ export default async function WritingDetailPage({
         </p>
 
         <div className="prose-copy mt-12 border-t border-black/10 pt-10 text-xl leading-9 text-ink/80">
-          {article.content.map((paragraph) => (
+          {article.content.map((paragraph: string) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
@@ -39,7 +50,7 @@ export default async function WritingDetailPage({
         <section className="mt-14 rounded-[2rem] border border-black/10 bg-white p-8 shadow-soft">
           <p className="text-xs uppercase tracking-[0.32em] text-bronze">External Publishing Links</p>
           <div className="mt-6 space-y-4">
-            {article.externalLinks.map((link) => (
+            {article.externalLinks.map((link: { href: string; label: string }) => (
               <Link key={link.href} href={link.href} target="_blank" className="flex items-center justify-between rounded-[1.2rem] bg-[#f7f1e7] px-5 py-4 text-base text-ink transition hover:bg-[#efe5d6]">
                 <span>{link.label}</span>
                 <span aria-hidden>↗</span>

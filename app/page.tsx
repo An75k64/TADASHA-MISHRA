@@ -2,9 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/container";
 import { SectionHeading } from "@/components/section-heading";
-import { galleryImages, stats, timeline } from "@/lib/site-data";
+import { prisma } from "@/lib/db";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const stats = await prisma.stat.findMany({ orderBy: { orderIndex: 'asc' } });
+  const timelineData = await prisma.timelineEntry.findMany({ orderBy: { orderIndex: 'asc' } });
+
+  const homeSetting = await prisma.siteSetting.findUnique({ where: { key: 'home' } });
+  const homeData = homeSetting ? JSON.parse(homeSetting.value) : {
+    headline: "Tadasha Mishra",
+    designation: "DIRECTOR GENERAL OF POLICE, JHARKHAND",
+    description: "First woman to lead Jharkhand Police, focused on strengthening accountability, public trust, and effective policing systems.",
+  };
+
+  const aboutSetting = await prisma.siteSetting.findUnique({ where: { key: 'about' } });
+  const aboutData = aboutSetting ? JSON.parse(aboutSetting.value) : {
+    philosophy: "Effective policing is rooted in intelligence-driven strategy, institutional transparency, and an unwavering commitment to public safety.",
+    biography: "Leading Jharkhand Police with over three decades of experience in investigation, administration, and public service.",
+  };
+
   return (
     <>
       <section className="relative overflow-hidden border-b border-black/10">
@@ -18,7 +34,7 @@ export default function HomePage() {
               className="text-5xl font-semibold leading-[1.02] tracking-[-0.02em] text-ink sm:text-6xl lg:text-7xl text-[#0d2a52]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              Tadasha Mishra
+              {homeData.headline}
             </h1>
 
             <div className="mt-8 flex items-center gap-4">
@@ -27,16 +43,16 @@ export default function HomePage() {
                 className="text-xs font-semibold uppercase tracking-[0.34em]"
                 style={{ color: "#e8850a" }}
               >
-                DIRECTOR GENERAL OF POLICE, JHARKHAND
+                {homeData.designation}
               </p>
             </div>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-ink/75">
-              First woman to lead Jharkhand Police, focused on strengthening accountability, public trust, and effective policing systems.
+            <p className="mt-6 max-w-xl text-lg leading-8 text-ink/75 whitespace-pre-wrap">
+              {homeData.description}
             </p>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-ink/75">
-              Leading Jharkhand Police with over three decades of experience in investigation, administration, and public service.
+            <p className="mt-6 max-w-xl text-lg leading-8 text-ink/75 whitespace-pre-wrap">
+              {aboutData.biography}
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -145,7 +161,7 @@ export default function HomePage() {
 
           {/* RIGHT CONTENT */}
           <div className="space-y-8">
-            {timeline.slice(0, 3).map((entry) => (
+            {timelineData.slice(0, 3).map((entry) => (
               <div
                 key={entry.year}
                 className="relative grid gap-3 border-l border-bronze/40 pl-6 md:grid-cols-[120px_1fr]"
@@ -208,7 +224,7 @@ export default function HomePage() {
             className="mt-12 text-[28px] leading-[1.4] text-[#0d2a52] sm:text-4xl md:text-[44px]"
             style={{ fontFamily: "'Playfair Display', serif" }}
           >
-            “Effective policing is rooted in intelligence-driven strategy, institutional transparency, and an unwavering commitment to public safety.”
+            “{aboutData.philosophy}”
           </blockquote>
 
           {/* Elegant separator */}

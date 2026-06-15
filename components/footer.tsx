@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { Container } from "@/components/container";
-import { contactDetails } from "@/lib/site-data";
+import { prisma } from "@/lib/db";
 
-export function Footer() {
+export async function Footer() {
+  const settings = await prisma.siteSetting.findUnique({ where: { key: 'contactDetails' } });
+  const contactDetails = JSON.parse(settings?.value || "{\"email\":\"\",\"office\":\"\",\"social\":{\"twitter\":\"\",\"instagram\":\"\",\"linkedin\":\"\"}}");
+
   return (
     <footer className="relative border-t border-black/10 overflow-hidden">
 
