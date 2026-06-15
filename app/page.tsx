@@ -16,10 +16,11 @@ export default async function HomePage() {
   };
 
   const aboutSetting = await prisma.siteSetting.findUnique({ where: { key: 'about' } });
-  const aboutData = aboutSetting ? JSON.parse(aboutSetting.value) : {
+  const defaultAboutData = {
     philosophy: "Effective policing is rooted in intelligence-driven strategy, institutional transparency, and an unwavering commitment to public safety.",
     biography: "Leading Jharkhand Police with over three decades of experience in investigation, administration, and public service.",
   };
+  const aboutData = aboutSetting ? { ...defaultAboutData, ...JSON.parse(aboutSetting.value) } : defaultAboutData;
 
   return (
     <>
