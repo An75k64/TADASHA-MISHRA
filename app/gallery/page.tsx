@@ -258,7 +258,7 @@ export default function GalleryPage() {
             <div className="group relative overflow-hidden rounded-2xl bg-navy/5 ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg cursor-pointer" onClick={() => setModalData(POPUP_DATA.popup1)}>
               <div className="relative aspect-[1.3333] w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img id="popup1" src="/images/image1.jpg" alt="Popup 1" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+                <img src="/images/image1.jpg" alt="Popup 1" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
               </div>
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent p-4">
                 <p className="text-sm font-semibold text-white">DGP Reviews Crime in Palamu</p>
@@ -270,7 +270,7 @@ export default function GalleryPage() {
             <div className="group relative overflow-hidden rounded-2xl bg-navy/5 ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg cursor-pointer" onClick={() => setModalData(POPUP_DATA.popup2)}>
               <div className="relative aspect-[1.3333] w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img id="popup2" src="/images/image2.jpg" alt="Popup 2" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+                <img src="/images/image2.jpg" alt="Popup 2" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
               </div>
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent p-4">
                 <p className="text-sm font-semibold text-white">DGP Orders SIT Formation</p>
@@ -282,7 +282,7 @@ export default function GalleryPage() {
             <div className="group relative overflow-hidden rounded-2xl bg-navy/5 ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg cursor-pointer" onClick={() => setModalData(POPUP_DATA.popup3)}>
               <div className="relative aspect-[1.3333] w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img id="popup3" src="/images/image3.jpg" alt="Popup 3" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
+                <img src="/images/image3.jpg" alt="Popup 3" className="object-cover w-full h-full transition duration-500 group-hover:scale-105" />
               </div>
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-navy/90 via-navy/40 to-transparent p-4">
                 <p className="text-sm font-semibold text-white">Public Addresses Issues</p>
@@ -356,21 +356,39 @@ export default function GalleryPage() {
           >
             <div
               onClick={e => e.stopPropagation()}
+              onScroll={(e) => {
+                const img = document.getElementById('modalHeroImage');
+                const title = document.getElementById('modalHeroTitle');
+                if (img && title) {
+                  const scrollY = e.currentTarget.scrollTop;
+                  // Parallax and fade effect (Snow Fall style)
+                  const opacity = Math.max(0, 1 - scrollY / 250);
+                  img.style.opacity = (opacity * 0.85).toString();
+                  img.style.transform = `scale(1.04) translateY(${scrollY * 0.4}px)`; // Parallax for image
+                  title.style.opacity = opacity.toString();
+                  title.style.transform = `translateY(${scrollY * 0.5}px)`; // Parallax for title
+                }
+              }}
               style={{
                 position: 'relative',
                 width: '100%', maxWidth: '680px',
                 maxHeight: '92vh',
                 borderRadius: '20px',
-                overflow: 'hidden',
+                overflowY: 'auto',
+                overflowX: 'hidden',
                 display: 'flex', flexDirection: 'column',
                 boxShadow: '0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)',
                 animation: 'storySlideUp 0.35s cubic-bezier(0.22,1,0.36,1) forwards',
+                background: '#fdfaf6',
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#d4c4a8 transparent',
               }}
             >
               {/* ── HERO IMAGE ── */}
-              <div style={{ position: 'relative', width: '100%', height: '280px', flexShrink: 0, overflow: 'hidden', background: '#111' }}>
+              <div style={{ position: 'relative', width: '100%', height: '280px', flexShrink: 0, overflow: 'hidden', background: '#fdfaf6', zIndex: 0 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
+                  id="modalHeroImage"
                   src={modalData.src}
                   alt={headline}
                   style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85, transform: 'scale(1.04)' }}
@@ -432,7 +450,7 @@ export default function GalleryPage() {
                 </button>
 
                 {/* Headline over image */}
-                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 24px 22px' }}>
+                <div id="modalHeroTitle" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 24px 22px' }}>
                   <h2 style={{
                     margin: 0,
                     color: '#fff',
@@ -449,13 +467,17 @@ export default function GalleryPage() {
               </div>
 
               {/* ── ARTICLE BODY ── */}
-              <div style={{
-                flex: 1,
-                overflowY: 'auto',
-                background: '#fdfaf6',
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#d4c4a8 transparent',
-              }}>
+              <div
+                style={{
+                  position: 'relative',
+                  zIndex: 10,
+                  flex: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: '#fdfaf6',
+                  minHeight: '100%'
+                }}
+              >
                 {/* Decorative rule */}
                 <div style={{ padding: '24px 28px 0', display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ height: '2px', width: '28px', background: '#e8850a', borderRadius: '2px', flexShrink: 0 }} />
